@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 4%;
+  }
+
+  body {
+    background-color: #fafafa;
+    color: #09090b;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Minimalist sleek scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(161, 161, 170, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(113, 113, 122, 0.5);
+}
+
+/* Minimalist Utility Classes */
+.minimal-card {
+  background-color: #ffffff;
+  color: #09090b;
+  border: 1px solid rgba(228, 228, 231, 0.9);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.minimal-card-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.minimal-card-hover:hover {
+  border-color: rgba(161, 161, 170, 0.6);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}
+
+.minimal-btn-primary {
+  background-color: #09090b;
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+}
+.minimal-btn-primary:hover {
+  background-color: #27272a;
+}
+
+.story-ring-gradient {
+  background: linear-gradient(135deg, #18181b 0%, #71717a 100%);
+}

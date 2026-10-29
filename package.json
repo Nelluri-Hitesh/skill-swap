@@ -1,0 +1,14 @@
+{
+  "name": "skill-swap-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix skillswap run dev",
+    "build": "npm --prefix skillswap run build",
+    "start": "npm --prefix skillswap run start",
+    "lint": "npm --prefix skillswap run lint"
+  },
+  "dependencies": {
+    "officeparser": "^8.1.1"
+  }
+}
