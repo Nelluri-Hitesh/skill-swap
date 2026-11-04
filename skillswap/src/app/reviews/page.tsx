@@ -18,31 +18,31 @@ export default function ReviewsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0f1117] text-gray-900 font-sans">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans">
       <AppSidebar className="hidden md:flex" />
 
-      <div className="md:pl-60 flex flex-col min-h-screen">
+      <div className="md:pl-64 flex flex-col min-h-screen">
         <TopNavbar profile={currentUser} />
 
-        <main className="flex-1 p-4 md:p-6 pb-24 md:pb-8 space-y-6 max-w-5xl mx-auto w-full">
+        <main className="flex-1 px-8 pb-12 max-w-[1200px] mx-auto w-full space-y-6">
           {/* Header */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="bg-white rounded-3xl border border-[#f0f0f0] shadow-xs p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
-              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-                Peer Ratings & Reviews
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                Peer Ratings &amp; Reviews
               </h1>
-              <p className="text-xs md:text-sm text-gray-500 mt-1">
+              <p className="text-xs md:text-sm text-slate-500 mt-1">
                 Authentic testimonials from your 1-on-1 teaching and learning sessions on SkillSwap.
               </p>
             </div>
 
             {/* Overall score */}
-            <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <div className="flex items-center gap-4 bg-slate-50/80 p-5 rounded-2xl border border-slate-100">
               <div className="text-center">
-                <div className="text-3xl font-black text-gray-900 leading-none">
+                <div className="text-3xl font-black text-slate-900 leading-none">
                   {currentUser.rating_avg.toFixed(1)}
                 </div>
-                <div className="flex items-center gap-0.5 justify-center mt-1">
+                <div className="flex items-center gap-0.5 justify-center mt-1.5">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
                       key={i}
@@ -50,7 +50,7 @@ export default function ReviewsPage() {
                     />
                   ))}
                 </div>
-                <div className="text-[10px] text-gray-400 mt-1">
+                <div className="text-[11px] text-slate-400 mt-1">
                   {reviews.length} total reviews
                 </div>
               </div>
@@ -58,33 +58,33 @@ export default function ReviewsPage() {
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2 border-b border-[#1f2333] pb-3">
+          <div className="flex gap-2.5 border-b border-slate-200/70 pb-3">
             <button
               onClick={() => setFilterType("ALL")}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                 filterType === "ALL"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white/5 text-gray-400 hover:text-white"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
               All Reviews ({reviews.length})
             </button>
             <button
               onClick={() => setFilterType("TEACHING")}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                 filterType === "TEACHING"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white/5 text-gray-400 hover:text-white"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
               Teaching Reviews
             </button>
             <button
               onClick={() => setFilterType("LEARNING")}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                 filterType === "LEARNING"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white/5 text-gray-400 hover:text-white"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
               Learning Reviews
@@ -92,24 +92,24 @@ export default function ReviewsPage() {
           </div>
 
           {/* Reviews List */}
-          <div className="space-y-3.5">
+          <div className="space-y-4">
             {filteredReviews.map((rev) => (
               <div
                 key={rev.id}
-                className="bg-white rounded-xl border border-gray-100 shadow-card p-5 transition-card space-y-3"
+                className="bg-white rounded-2xl border border-[#f0f0f0] shadow-xs p-6 transition-all hover:shadow-sm space-y-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <img
                       src={rev.from_user.avatar_url || ""}
                       alt={rev.from_user.full_name}
-                      className="w-10 h-10 rounded-full object-cover border border-gray-100"
+                      className="w-10 h-10 rounded-full object-cover border border-slate-100"
                     />
                     <div>
-                      <h3 className="text-xs font-bold text-gray-900 leading-tight">
+                      <h3 className="text-xs font-bold text-slate-900 leading-tight">
                         {rev.from_user.full_name}
                       </h3>
-                      <p className="text-[11px] text-gray-400">
+                      <p className="text-[11px] text-slate-400">
                         {rev.type === "TEACHING" ? "Learner Testimonial" : "Peer Mentor Feedback"} • {formatRelativeTime(rev.created_at)}
                       </p>
                     </div>
@@ -125,7 +125,7 @@ export default function ReviewsPage() {
                   </div>
                 </div>
 
-                <p className="text-xs text-gray-700 leading-relaxed bg-gray-50/70 p-3.5 rounded-xl border border-gray-100 italic">
+                <p className="text-xs text-slate-700 leading-relaxed bg-slate-50/80 p-4 rounded-xl border border-slate-100 italic">
                   &quot;{rev.comment}&quot;
                 </p>
               </div>

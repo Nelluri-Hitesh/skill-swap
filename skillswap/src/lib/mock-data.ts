@@ -41,7 +41,7 @@ export const CURRENT_USER: ProfileWithSkills = {
       skill_name: "React & Next.js",
       skill_category: "Coding",
       type: "TEACH",
-      level: "EXPERT",
+      level: "ADVANCED",
       description: "Building production full-stack web applications with Next.js App Router & Tailwind.",
       hours_count: 5.0,
       created_at: new Date().toISOString(),
@@ -329,11 +329,13 @@ export const MOCK_COMMUNITY_MEMBERS: ProfileWithSkills[] = [
 export const MOCK_UPCOMING_SESSIONS: (Session & {
   partner: ProfileWithSkills;
   role: "TEACHER" | "LEARNER";
-  displayBadge: "Next" | "Upcoming";
+  displayBadge: "Next" | "Upcoming" | "Live Now" | "Completed" | string;
   displayDate: string;
   displayTime: string;
-  hostTeaches: string;
-  participantTeaches: string;
+  hostTeaches?: string;
+  participantTeaches?: string;
+  zoom_meeting_id?: string;
+  zoom_passcode?: string;
 })[] = [
   {
     id: "sess-1",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { User, Camera, Save, Check, X } from "lucide-react";
+import { User, Camera, Save, Check, X, Clock, Calendar } from "lucide-react";
 import { useSkillSwapStore } from "@/lib/store";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopNavbar } from "@/components/layout/TopNavbar";
@@ -19,8 +19,17 @@ export default function SettingsView() {
   );
   const [instagram, setInstagram] = useState("creator_alex");
   const [github, setGithub] = useState("alexmorgan");
+  const [selectedDays, setSelectedDays] = useState<string[]>(["Mon", "Wed", "Fri", "Sat"]);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  const toggleDay = (day: string) => {
+    setSelectedDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    );
+  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -214,6 +223,47 @@ export default function SettingsView() {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* WEEKLY AVAILABILITY (From Onboarding Image 5) */}
+              <div className="pt-4 border-t border-slate-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100/60">
+                    <Clock className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-[#0f172a]">
+                      Your Typical Availability
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      Select the days you are generally free for 1-hour swap sessions.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2.5">
+                  {days.map((day) => {
+                    const isSelected = selectedDays.includes(day);
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        onClick={() => toggleDay(day)}
+                        className={`px-5 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                          isSelected
+                            ? "bg-blue-600 text-white shadow-md shadow-blue-500/20 ring-2 ring-blue-600/30"
+                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <p className="text-[11px] text-slate-400 mt-3">
+                  You can fine-tune specific hour slots later under Settings.
+                </p>
               </div>
 
               {/* Save Button */}

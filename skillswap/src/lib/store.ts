@@ -1,5 +1,5 @@
-"use client";
 
+"use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type {
@@ -45,8 +45,19 @@ interface SkillSwapState {
   notifications: Notification[];
   messages: Record<string, ChatMessage[]>;
   activeChatConnectionId: string | null;
+  activeLiveSessionId: string | null;
 
   // Actions
+  startInstantZoomSession: (
+    partner: ProfileWithSkills,
+    customSkillName?: string
+  ) => {
+    success: boolean;
+    sessionId?: string;
+    error?: string;
+    activeSession?: (typeof MOCK_UPCOMING_SESSIONS)[number];
+  };
+  endSession: (sessionId: string) => void;
   addSkill: (skill: {
     skill_name: string;
     skill_category: string;
@@ -139,6 +150,7 @@ export const useSkillSwapStore = create<SkillSwapState>()(
       reviews: MOCK_REVIEWS,
       notifications: MOCK_NOTIFICATIONS,
       activeChatConnectionId: "conn-1",
+      activeLiveSessionId: null,
       messages: {
         "conn-1": [
           {
@@ -323,11 +335,126 @@ export const useSkillSwapStore = create<SkillSwapState>()(
           };
         }),
 
+      startInstantZoomSession: (partner, customSkillName) => {
+        const state = get();
+        // 1. Single session check: check if there's already an active session
+        const existingActive = state.sessions.find(
+          (s) => s.status === "IN_PROGRESS" || s.id === state.activeLiveSessionId
+        );
+
+        if (existingActive && existingActive.status === "IN_PROGRESS") {
+          return {
+            success: false,
+            error: `Active Session Conflict: You currently have an active live session in progress with ${existingActive.partner.full_name} (${existingActive.skill_name}). Only 1 active session is allowed at a time.`,
+            activeSession: existingActive,
+          };
+        }
+
+        // 2. Check the time: current timestamp and format
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const dateStr = now.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+        
+        const skillName = customSkillName || partner.teach_skills[0]?.skill_name || "Peer Skill Swap";
+        const randomMeetingId = `${Math.floor(100 + Math.random() * 900)} ${Math.floor(100 + Math.random() * 900)} ${Math.floor(1000 + Math.random() * 9000)}`;
+        const randomPasscode = `SWAP${Math.floor(1000 + Math.random() * 9000)}`;
+        const cleanId = randomMeetingId.replace(/\s+/g, "");
+        const zoomLink = `https://zoom.us/j/${cleanId}?pwd=${randomPasscode}`;
+
+        const newSessionId = `sess-zoom-${Date.now()}`;
+        const newSession: (typeof MOCK_UPCOMING_SESSIONS)[number] = {
+          id: newSessionId,
+          connection_id: `conn-${partner.id}`,
+          teacher_id: partner.id,
+          learner_id: state.currentUser.id,
+          skill_name: skillName,
+          hostTeaches: skillName,
+          participantTeaches: state.currentUser.teach_skills[0]?.skill_name || "Code Review & Architecture",
+          scheduled_at: now.toISOString(),
+          duration_minutes: 45,
+          status: "IN_PROGRESS" as const,
+          meeting_link: zoomLink,
+          zoom_meeting_id: randomMeetingId,
+          zoom_passcode: randomPasscode,
+          notes: `Instant 1-on-1 Zoom skill exchange started at ${timeStr}.`,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          partner,
+          role: "LEARNER" as const,
+          displayBadge: "Live Now",
+          displayDate: `Today, ${dateStr}`,
+          displayTime: `${timeStr} (Live Now)`,
+        };
+
+        // Also ensure connection is marked ACCEPTED so they are mutual peers
+        const existingConnIndex = state.connections.findIndex(
+          (c) =>
+            (c.requester_id === state.currentUser.id && c.receiver_id === partner.id) ||
+            (c.receiver_id === state.currentUser.id && c.requester_id === partner.id)
+        );
+
+        let updatedConnections = [...state.connections];
+        if (existingConnIndex >= 0) {
+          updatedConnections[existingConnIndex] = {
+            ...updatedConnections[existingConnIndex],
+            status: "ACCEPTED",
+          };
+        } else {
+          updatedConnections.unshift({
+            id: `conn-${Date.now()}`,
+            requester_id: state.currentUser.id,
+            receiver_id: partner.id,
+            status: "ACCEPTED",
+            message: `Connected for live 1-on-1 Zoom session on ${skillName}.`,
+            created_at: now.toISOString(),
+            user: partner,
+          });
+        }
+
+        set({
+          sessions: [newSession, ...state.sessions.filter((s) => s.id !== newSessionId)],
+          activeLiveSessionId: newSessionId,
+          connections: updatedConnections,
+          notifications: [
+            {
+              id: `notif-${Date.now()}`,
+              user_id: state.currentUser.id,
+              type: "SESSION_SCHEDULED",
+              title: "Zoom Session Active",
+              body: `Live Zoom session for '${skillName}' with ${partner.full_name} has started at ${timeStr}.`,
+              data: { session_id: newSessionId },
+              read_at: null,
+              created_at: now.toISOString(),
+            },
+            ...state.notifications,
+          ],
+        });
+
+        return {
+          success: true,
+          sessionId: newSessionId,
+          session: newSession,
+        };
+      },
+
+      endSession: (sessionId) =>
+        set((state) => ({
+          sessions: state.sessions.map((s) =>
+            s.id === sessionId ? { ...s, status: "COMPLETED" as const, displayBadge: "Completed" } : s
+          ),
+          activeLiveSessionId: state.activeLiveSessionId === sessionId ? null : state.activeLiveSessionId,
+          currentUser: {
+            ...state.currentUser,
+            completed_sessions_count: state.currentUser.completed_sessions_count + 1,
+          },
+        })),
+
       completeSession: (sessionId) =>
         set((state) => ({
           sessions: state.sessions.map((s) =>
-            s.id === sessionId ? { ...s, status: "COMPLETED" as const } : s
+            s.id === sessionId ? { ...s, status: "COMPLETED" as const, displayBadge: "Completed" } : s
           ),
+          activeLiveSessionId: state.activeLiveSessionId === sessionId ? null : state.activeLiveSessionId,
           currentUser: {
             ...state.currentUser,
             completed_sessions_count: state.currentUser.completed_sessions_count + 1,

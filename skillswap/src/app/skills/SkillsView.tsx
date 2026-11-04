@@ -18,7 +18,7 @@ type SkillEntry = {
   skill_name: string;
   skill_category: string;
   level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
-  description?: string;
+  description?: string | null;
   hours_count?: number;
 };
 

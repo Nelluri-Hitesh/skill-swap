@@ -41,13 +41,13 @@ export default function ConnectionsPage() {
   const acceptedConnections = connections.filter((c) => c.status === "ACCEPTED");
 
   return (
-    <div className="min-h-screen bg-[#0f1117] text-gray-900 font-sans">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans">
       <AppSidebar className="hidden md:flex" />
 
-      <div className="md:pl-60 flex flex-col min-h-screen">
+      <div className="md:pl-64 flex flex-col min-h-screen">
         <TopNavbar profile={currentUser} />
 
-        <main className="flex-1 p-4 md:p-6 pb-24 md:pb-8 space-y-6 max-w-6xl mx-auto w-full">
+        <main className="flex-1 px-8 pb-12 max-w-[1400px] mx-auto w-full space-y-6">
           {/* Header */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6 md:p-8">
             <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">

@@ -22,7 +22,7 @@ import { useSkillSwapStore } from "@/lib/store";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { loginAsGuest, loginWithGoogleUser, loginWithPhoneUser } = useSkillSwapStore();
+  const { loginAsGuest, loginWithGoogleUser, loginWithPhoneUser, updateProfile } = useSkillSwapStore();
 
   const [authMethod, setAuthMethod] = useState<"EMAIL" | "PHONE">("EMAIL");
   const [email, setEmail] = useState("");
@@ -50,7 +50,7 @@ export default function LoginPage() {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -58,6 +58,11 @@ export default function LoginPage() {
       if (error) {
         setErrorMsg(error.message);
       } else {
+        if (data?.user) {
+          const meta = data.user.user_metadata;
+          const name = meta?.full_name || meta?.name || email.split("@")[0];
+          updateProfile({ full_name: name, username: email.split("@")[0] });
+        }
         router.push("/dashboard");
       }
     } catch {

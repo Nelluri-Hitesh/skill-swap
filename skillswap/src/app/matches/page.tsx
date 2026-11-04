@@ -43,23 +43,23 @@ export default function MatchesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1117] text-gray-900 font-sans">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans">
       <AppSidebar className="hidden md:flex" />
 
-      <div className="md:pl-60 flex flex-col min-h-screen">
+      <div className="md:pl-64 flex flex-col min-h-screen">
         <TopNavbar profile={currentUser} />
 
-        <main className="flex-1 p-4 md:p-6 pb-24 md:pb-8 space-y-6 max-w-7xl mx-auto w-full">
+        <main className="flex-1 px-8 pb-12 max-w-[1400px] mx-auto w-full space-y-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-semibold mb-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200 text-xs font-semibold mb-2">
                 <Sparkles className="w-3.5 h-3.5" /> AI Compatibility Engine
               </div>
-              <h1 className="text-2xl font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
                 My Best Matches
               </h1>
-              <p className="text-xs md:text-sm text-gray-400 mt-0.5">
+              <p className="text-xs md:text-sm text-slate-500 mt-0.5">
                 Peer matches calculated by mutual skill reciprocity, overlapping schedules, and timezone compatibility.
               </p>
             </div>
@@ -165,7 +165,7 @@ export default function MatchesPage() {
 
           {/* ADDITIONAL MATCHES GRID */}
           <div>
-            <h2 className="text-base font-bold text-white mb-4">
+            <h2 className="text-base font-bold text-slate-900 mb-4">
               More High-Compatibility Matches
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

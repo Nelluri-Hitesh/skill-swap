@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Calendar,
   Clock,
@@ -14,6 +15,7 @@ import { TopNavbar } from "@/components/layout/TopNavbar";
 import { ScheduleModal } from "@/components/scheduling/ScheduleModal";
 
 export default function SessionsView() {
+  const router = useRouter();
   const { currentUser, sessions, completeSession } = useSkillSwapStore();
 
   const [filter, setFilter] = useState<"ALL" | "UPCOMING" | "COMPLETED">("ALL");
@@ -160,7 +162,7 @@ export default function SessionsView() {
                 <div className="flex items-center justify-between pt-2">
                   <button
                     onClick={() =>
-                      window.open(session.meeting_link || "https://meet.google.com", "_blank")
+                      router.push(`/zoom?sessionId=${session.id}`)
                     }
                     className="bg-[#d1fae5] hover:bg-[#a7f3d0] text-[#059669] font-semibold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
                   >

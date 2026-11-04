@@ -73,7 +73,6 @@ const navItems: NavItem[] = [
     href: "/notifications",
     icon: Bell,
     label: "Notifications",
-    badgeCount: 2,
   },
   {
     href: "/settings",

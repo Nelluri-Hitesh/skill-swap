@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
   Star,
@@ -13,6 +14,7 @@ import {
   CheckCircle2,
   Share2,
   BookOpen,
+  Pencil,
 } from "lucide-react";
 import { useSkillSwapStore } from "@/lib/store";
 import { SkillBadge } from "@/components/ui/SkillBadge";
@@ -67,13 +69,13 @@ export default function UserProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1117] text-gray-900 font-sans">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans">
       <AppSidebar className="hidden md:flex" />
 
-      <div className="md:pl-60 flex flex-col min-h-screen">
+      <div className="md:pl-64 flex flex-col min-h-screen">
         <TopNavbar profile={currentUser} />
 
-        <main className="flex-1 p-4 md:p-6 pb-24 md:pb-8 space-y-6 max-w-6xl mx-auto w-full">
+        <main className="flex-1 px-8 pb-12 max-w-[1400px] mx-auto w-full space-y-6">
           {/* TOP PROFILE CARD */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6 md:p-8 relative">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -220,18 +222,29 @@ export default function UserProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* LEFT: Skills I Teach */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <BookOpen className="w-4 h-4" />
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-bold text-gray-900">
+                      Skills I Teach
+                    </h2>
+                    <p className="text-xs text-gray-400">
+                      Mentorship & knowledge available for exchange
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-sm font-bold text-gray-900">
-                    Skills I Teach
-                  </h2>
-                  <p className="text-xs text-gray-400">
-                    Mentorship & knowledge available for exchange
-                  </p>
-                </div>
+
+                <Link
+                  href="/skills"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all cursor-pointer shadow-2xs"
+                  title="Edit Skills I Teach"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  Edit
+                </Link>
               </div>
 
               <div className="space-y-3">
@@ -261,18 +274,29 @@ export default function UserProfilePage() {
 
             {/* RIGHT: Want to Learn */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-                  <Star className="w-4 h-4" />
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                    <Star className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-bold text-gray-900">
+                      Want to Learn
+                    </h2>
+                    <p className="text-xs text-gray-400">
+                      Skills looking to acquire through peer exchange
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-sm font-bold text-gray-900">
-                    Want to Learn
-                  </h2>
-                  <p className="text-xs text-gray-400">
-                    Skills looking to acquire through peer exchange
-                  </p>
-                </div>
+
+                <Link
+                  href="/skills"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-700 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-all cursor-pointer shadow-2xs"
+                  title="Edit Skills to Learn"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  Edit
+                </Link>
               </div>
 
               <div className="space-y-3">

@@ -27,7 +27,8 @@ export function TopNavbar({ profile }: TopNavbarProps) {
   };
 
   const avatarSrc = currentUser.avatar_url || "/avatar-nani.jpg";
-  const displayName = currentUser.full_name || profile?.username || "nani";
+  const displayName = currentUser.full_name || profile?.username || "Learner";
+  const userHandle = currentUser.username || profile?.username || "profile";
 
   return (
     <header className="h-14 flex items-center justify-end px-8 z-30">
@@ -58,12 +59,12 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                   {displayName}
                 </div>
                 <div className="text-[10px] text-slate-400">
-                  @{profile?.username || "nani"}
+                  @{userHandle}
                 </div>
               </div>
               <button
                 onClick={() => {
-                  router.push(`/profile/${profile?.username || "nani"}`);
+                  router.push(`/profile/${userHandle}`);
                   setDropdownOpen(false);
                 }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-600 hover:bg-slate-50 transition-colors"

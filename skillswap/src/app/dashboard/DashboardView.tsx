@@ -1,13 +1,40 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, Calendar, ArrowLeftRight } from "lucide-react";
 import { useSkillSwapStore } from "@/lib/store";
+import { createClient } from "@/lib/supabase/client";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopNavbar } from "@/components/layout/TopNavbar";
 
 export default function DashboardView() {
-  const { currentUser } = useSkillSwapStore();
+  const { currentUser, updateProfile } = useSkillSwapStore();
+  const [userName, setUserName] = useState(
+    currentUser.full_name || currentUser.username || "Alex Mercer"
+  );
+
+  useEffect(() => {
+    if (currentUser.full_name) {
+      setUserName(currentUser.full_name);
+    }
+    try {
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data }) => {
+        if (data?.user) {
+          const meta = data.user.user_metadata;
+          const foundName =
+            meta?.full_name || meta?.name || data.user.email?.split("@")[0];
+          if (foundName) {
+            setUserName(foundName);
+            updateProfile({ full_name: foundName });
+          }
+        }
+      });
+    } catch {
+      // ignore
+    }
+  }, [currentUser.full_name, currentUser.username, updateProfile]);
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans">
@@ -25,7 +52,7 @@ export default function DashboardView() {
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 mb-3">
-              Welcome back, <span className="text-[#0284c7]">nani.</span>
+              Welcome back, <span className="text-[#0284c7]">{userName}.</span>
             </h1>
 
             <div className="text-[11px] font-semibold text-slate-400 tracking-widest uppercase flex items-center gap-2 select-none">
